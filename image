@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas{
+            background:#eee;
+        }
+        .color{
+            width:30px;
+            height:30px;
+            border:0;
+            border-radius: 50%;
+        }
+        .color[data-color='black']{background-color: black;}
+        .color[data-color='red']{background-color: red;}
+    </style>
+</head>
+<body>
+    <canvas class='canvas' width='500' height='300'></canvas>
+    <div class="control">
+        <button class='color' data-color='red'></button>
+        <button class='color' data-color='black'></button>
+    </div>
+    <!---->
+    <script>
+        const canvas = document.querySelector('.canvas');//canvas고정
+        const context = canvas.getContext('2d');//2d를 그리는 과정이므로 고정
+        const control = document.querySelector('.control');
+        let drawingMode;//true일 때만 그리기
+        let colorVal = 'black';//색깔 넣기
+
+        canvas.addEventListener('mousedown', downHander);//마우스 눌렀을 때 발생
+        canvas.addEventListener('mousemove', moveHander);//마우스가 움직일때 발생
+        canvas.addEventListener('mouseup', upHander);//마우스에서 손을 땟을때 발생
+        control.addEventListener('click', setColor);//클릭했을 때 발
+
+        function downHander(){
+            drawingMode = true;
+        }//마우스 눌렀을 때 true
+        function upHander(){
+            drawingMode = false;
+        }//마우스에서 손 땠을 때 false
+
+        function moveHander(e){
+            if(!drawingMode) return;
+            //마우스 눌렀을 때 false 이므로 뒤에꺼 실행, 안눌렀을 때 true이므로 return
+            context.beginPath();
+            context.arc(e.layerX,e.layerY,10,0,Math.PI*2,false);
+            context.fill();
+            console.log(e.target)
+        }
+        function setColor(e){
+            colorVal = e.target.getAttribute('data-color');
+            //태그의 속성을 갖고옴
+            context.fillStyle = colorVal;
+        }
+
+    </script>
+</body>
+</html>
+
